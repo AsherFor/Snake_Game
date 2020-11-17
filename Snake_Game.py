@@ -1,68 +1,151 @@
 import turtle
+import random
+
+Up = False
+Down = False
+Left = False
+Right = False
+keep_playing = True
 
 #Draw Screen
-sc = turtle.Screen()
-sc.title("Snake Game")
-sc.bgcolor('#FFFFFF')
-sc.setup(width=1000, height=600)
+window = turtle.Screen()
+window.title("Snake Game")
+window.bgcolor('#FFFFFF')
+width = 500
+height = 500
+window.setup(width= width, height= height)
 
+# Snake head
 snake_head = turtle.Turtle()
-snake_head.speed(0)
 snake_head.shape("square")
-snake_head.color("black")
-snake_head.shapesize(stretch_wid=1, stretch_len=1)
+snake_head.color("#FF00FF")
 snake_head.penup()
-# snake_head.goto(0, 0)
-snake_head.setpos(0, 0)
+snake_head.goto(0, 0)
 
-y = 0
-x = 0
-def up_move():
-    y = snake_head.ycor()
-    y += 20
-    snake_head.sety(y)
-    print(x, y)
-    boundaries()
-
-
-def down_move():
-    y = snake_head.ycor()
-    y -= 20
-    snake_head.sety(y)
-    print(x ,y)
-    boundaries()
+# Make Apple
+apple = turtle.Turtle()
+apple.shape("circle")
+apple.color("#ff0000")
+apple.penup()
+apple.goto(0, 0)
+ran_x = random.randrange(-250, 250, 10)
+ran_y = random.randrange(-250, 250, 10)
+apple.setpos(ran_x, ran_y)
 
 
-def left_move():
-    x = snake_head.xcor()
-    x -= 20
-    snake_head.setx(x)
-    print(x, y)
-    boundaries()
+
+def check_boundaries():
+    global keep_playing
+    if snake_head.ycor() <= -245 or snake_head.ycor() >= 245:
+        keep_playing = False
+        close_text()
+    if snake_head.xcor() <= -250 or snake_head.xcor() >= 245:
+        close_text()
+    if ((apple.ycor() <= snake_head.ycor() + 5 and apple.ycor() >= snake_head.ycor() - 5) and
+            (apple.xcor() <= snake_head.xcor() + 5 and apple.xcor() >= snake_head.xcor() - 5)):
+            apple.setpos(ran_x, ran_y)
 
 
-def right_move():
-    x = snake_head.xcor()
-    x += 20
-    snake_head.setx(x)
-    print(x, y)
-    boundaries()
+def close_text():
+    close = turtle.Turtle()
+    close.hideturtle()
+    close.write("Wall hit", align="center", font=("Courier", 24, "normal"))
 
-def boundaries():
-    if snake_head.xcor() >= 500 or snake_head.xcor() <= -500:
-        print("end")
-        sc.bye()
-    if snake_head.ycor() >= 300 or snake_head.ycor() <= -300:
-        print("endy")
-        sc.bye()
+# def up_move():
+#     y = snake_head.ycor()
+#     y += 20
+#     snake_head.sety(y)
+#     print(x, y)
+#     boundaries()
+#
+#
+# def down_move():
+#     y = snake_head.ycor()
+#     y -= 20
+#     snake_head.sety(y)
+#     print(x ,y)
+#     boundaries()
+#
+#
+# def left_move():
+#     x = snake_head.xcor()
+#     x -= 20
+#     snake_head.setx(x)
+#     print(x, y)
+#     boundaries()
+#
+#
+# def right_move():
+#     x = snake_head.xcor()
+#     x += 20
+#     snake_head.setx(x)
+#     print(x, y)
+#     boundaries()
+
+def head_up():
+    global Up, Down, Left, Right
+    Up = True
+    Down = False
+    Left = False
+    Right = False
+
+def head_down():
+    global Up, Down, Left, Right
+    Up = False
+    Down = True
+    Left = False
+    Right = False
+
+def head_left():
+    global Up, Down, Left, Right
+    Up = False
+    Down = False
+    Left = True
+    Right = False
+
+def head_right():
+    global Up, Down, Left, Right
+    Up = False
+    Down = False
+    Left = False
+    Right = True
+
+def close_game():
+    exit()
+
+def game_play():
+    while keep_playing is True:
+        if Up == True:
+            y = snake_head.ycor()
+            y += 5
+            snake_head.sety(y)
+
+        if Down == True:
+            y = snake_head.ycor()
+            y -= 5
+            snake_head.sety(y)
+
+        if Left == True:
+            x = snake_head.xcor()
+            x -= 5
+            snake_head.setx(x)
+
+        if Right == True:
+            x = snake_head.xcor()
+            x += 5
+            snake_head.setx(x)
+        window.update()
+        check_boundaries()
 
 
 # Keyboard bindings
-sc.listen()
-sc.onkeypress(up_move, "w")
-sc.onkeypress(down_move, "s")
-sc.onkeypress(left_move, "a")
-sc.onkeypress(right_move, "d")
+window.listen()
+window.onkeypress(head_up, "w")
+window.onkeypress(head_down, "s")
+window.onkeypress(head_left, "a")
+window.onkeypress(head_right, "d")
+window.onkeypress(close_game, "Escape")
 
+game_play()
 turtle.done()
 
