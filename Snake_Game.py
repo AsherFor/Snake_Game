@@ -12,7 +12,7 @@ apple = turtle.Turtle()
 #Draw Screen
 window = turtle.Screen()
 window.title("Snake Game")
-window.bgcolor('#FFFFFF')
+window.bgcolor('#00ff00')
 width = 500
 height = 500
 window.setup(width= width, height= height)
@@ -31,8 +31,8 @@ def spawn_apple():
     apple.color("#ff0000")
     apple.penup()
     apple.goto(0, 0)
-    ran_x = random.randrange(-250, 250, 10)
-    ran_y = random.randrange(-250, 250, 10)
+    ran_x = random.randrange(-245, 245, 10)
+    ran_y = random.randrange(-245, 245, 10)
     apple.setpos(ran_x, ran_y)
 
 
