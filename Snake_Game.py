@@ -125,4 +125,3 @@ window.onkeypress(close_game, "Escape")
 spawn_apple()
 game_play()
 turtle.done()
-
