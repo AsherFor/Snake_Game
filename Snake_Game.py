@@ -31,8 +31,8 @@ def spawn_apple():
     apple.color("#ff0000")
     apple.penup()
     apple.goto(0, 0)
-    ran_x = random.randrange(-245, 245, 10)
-    ran_y = random.randrange(-245, 245, 10)
+    ran_x = random.randrange(-240, 240, 10)
+    ran_y = random.randrange(-240, 240, 10)
     apple.setpos(ran_x, ran_y)
 
 
