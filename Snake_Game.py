@@ -1,15 +1,11 @@
 import turtle
 import random
 
-Up = False
-Down = False
-Left = False
-Right = False
 stop_or_keep_playing = True
 apple = turtle.Turtle()
 
 
-#Draw Screen
+# Draw Screen
 window = turtle.Screen()
 window.title("Snake Game")
 window.bgcolor('#00ff00')
@@ -19,10 +15,15 @@ window.setup(width= width, height= height)
 
 # Snake head
 snake_head = turtle.Turtle()
+snake_head.direction = "stop"
 snake_head.shape("square")
 snake_head.color("#FF00FF")
 snake_head.penup()
 snake_head.goto(0, 0)
+
+# Snake Body
+snake_body = []
+
 
 # Make Apple
 def spawn_apple():
@@ -30,11 +31,19 @@ def spawn_apple():
     apple.shape("circle")
     apple.color("#ff0000")
     apple.penup()
-    apple.goto(0, 0)
-    ran_x = random.randrange(-240, 240, 10)
-    ran_y = random.randrange(-240, 240, 10)
+    apple.speed(0)
+    ran_x = random.randrange(-240, 240, 5)
+    ran_y = random.randrange(-240, 240, 5)
     apple.setpos(ran_x, ran_y)
 
+
+def spawn_segment():
+    new_segment = turtle.Turtle()
+    new_segment.speed(0)
+    new_segment.shape("square")
+    new_segment.color("#FF00FF")
+    new_segment.penup()
+    snake_body.append(new_segment)
 
 
 def check_boundaries(apple):
@@ -45,9 +54,9 @@ def check_boundaries(apple):
     if snake_head.xcor() <= -245 or snake_head.xcor() >= 245:
         stop_or_keep_playing = False
         close_text()
-    if ((apple.ycor() <= snake_head.ycor() + 12 and apple.ycor() >= snake_head.ycor() - 12) and
-            (apple.xcor() <= snake_head.xcor() + 12 and apple.xcor() >= snake_head.xcor() - 12)):
-            spawn_apple()
+    if (snake_head.distance(apple)) <= 20:
+        spawn_apple()
+        spawn_segment()
 
 
 
@@ -58,61 +67,52 @@ def close_text():
     close.write("Wall hit", align="center", font=("Courier", 24, "normal"))
 
 def head_up():
-    global Up, Down, Left, Right
-    Up = True
-    Down = False
-    Left = False
-    Right = False
+    snake_head.direction = "up"
 
 def head_down():
-    global Up, Down, Left, Right
-    Up = False
-    Down = True
-    Left = False
-    Right = False
+    snake_head.direction = "down"
 
 def head_left():
-    global Up, Down, Left, Right
-    Up = False
-    Down = False
-    Left = True
-    Right = False
+    snake_head.direction = "left"
 
 def head_right():
-    global Up, Down, Left, Right
-    Up = False
-    Down = False
-    Left = False
-    Right = True
+    snake_head.direction = "right"
 
 def close_game():
-    exit()
+    turtle.bye()
 
 def game_play():
-    global Up, Down, Left, Right
     while stop_or_keep_playing == True:
-        if Up == True:
+        if snake_head.direction == "up":
             y = snake_head.ycor()
-            y += 5
+            y += 20
             snake_head.sety(y)
 
-        if Down == True:
+        if snake_head.direction == "down":
             y = snake_head.ycor()
-            y -= 5
+            y -= 20
             snake_head.sety(y)
 
-        if Left == True:
+        if snake_head.direction == "left":
             x = snake_head.xcor()
-            x -= 5
+            x -= 20
             snake_head.setx(x)
 
-        if Right == True:
+        if snake_head.direction == "right":
             x = snake_head.xcor()
-            x += 5
+            x += 20
             snake_head.setx(x)
         check_boundaries(apple)
         window.update()
-
+        # Move the end segment snake_body
+        for index in range(len(snake_body)-1, 0, -1):
+           x = snake_body[index -1].xcor()
+           y = snake_body[index -1].ycor()
+           snake_body[index].goto(x, y)
+        if len(snake_body) > 0:
+            x = snake_head.xcor()
+            y = snake_head.ycor()
+            snake_body[0].goto(x, y)
 
 # Keyboard bindings
 window.listen()
