@@ -62,10 +62,7 @@ def check_boundaries(apple):
     if (snake_head.distance(apple)) <= 20:
         spawn_apple()
         spawn_segment()
-
-
-
-
+        
 def close_text():
     close = turtle.Turtle()
     close.hideturtle()
